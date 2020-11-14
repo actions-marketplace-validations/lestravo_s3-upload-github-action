@@ -1,4 +1,4 @@
-name: "S3 File Upload"
+name: "S3 File Upload for gzip and brotli file"
 description: "Upload an object to an S3 bucket."
 author: "zdurham"
 runs:
