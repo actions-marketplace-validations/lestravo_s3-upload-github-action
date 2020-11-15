@@ -38,12 +38,14 @@ cd ${FILE}
 
 for f in `find . -iname '*.gz'`; do
   mv $f ${f%.gz} && \
-  aws s3 cp ${f%.gz} s3://${S3_BUCKET}/${S3_KEY}/ --region ${AWS_REGION} --content-encoding='gzip' $*
+  dir=$(echo ${f%.gz} | cut -c2-) && \
+  aws s3 cp ${f%.gz} s3://${S3_BUCKET}/${S3_KEY}${dir} --region ${AWS_REGION} --content-encoding='gzip' $*
 done
 
 for f in `find . -iname '*.br'`; do
   mv $f ${f%.br} && \
-  aws s3 cp ${f%.br} s3://${S3_BUCKET}/${S3_KEY}/ --region ${AWS_REGION} --content-encoding='br' $*
+  dir=$(echo ${f%.br} | cut -c2-) && \
+  aws s3 cp ${f%.br} s3://${S3_BUCKET}/${S3_KEY}${dir} --region ${AWS_REGION} --content-encoding='br' $*
 done
 
 rm -rf ~/.aws
