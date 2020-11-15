@@ -32,19 +32,23 @@ echo "[default]
 aws_access_key_id = ${AWS_ACCESS_KEY_ID}
 aws_secret_access_key = ${AWS_SECRET_ACCESS_KEY}" > ~/.aws/credentials
 
-aws s3 cp ${FILE} s3://${S3_BUCKET}/${S3_KEY} --region ${AWS_REGION} --recursive $*
-
 cd ${FILE}
 
 for f in `find . -iname '*.gz'`; do
   mv $f ${f%.gz} && \
-  aws s3 cp ${f%.gz} s3://${S3_BUCKET}/${S3_KEY} --region ${AWS_REGION} --content-encoding='gzip' $*
+  aws s3 cp ${f%.gz} s3://${S3_BUCKET}/${S3_KEY} --region ${AWS_REGION} --content-encoding='gzip' $* && \
+  rm ${f%.gz}
 done
 
 for f in `find . -iname '*.br'`; do
   mv $f ${f%.br} && \
-  aws s3 cp ${f%.br} s3://${S3_BUCKET}/${S3_KEY} --region ${AWS_REGION} --content-encoding='br' $*
+  aws s3 cp ${f%.br} s3://${S3_BUCKET}/${S3_KEY} --region ${AWS_REGION} --content-encoding='br' $* && \
+  rm ${f%.br}
 done
+
+cd ~
+
+aws s3 cp ${FILE} s3://${S3_BUCKET}/${S3_KEY} --region ${AWS_REGION} --recursive $*
 
 rm -rf ~/.aws
 
